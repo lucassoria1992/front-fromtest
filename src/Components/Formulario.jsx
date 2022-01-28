@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Form from 'react-bootstrap/Form'
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
-
+import itemsDatos from "./items_datos";
 
 
 const FormularioCarga = () => {
@@ -17,12 +17,9 @@ const FormularioCarga = () => {
             disponible: formData.get('disponible'),
         }
         const respuesta = await axios.post('http://localhost:4000/API/crear', data)
-        console.log(respuesta);
+        console.log(respuesta)
+        itemsDatos(data)
     }
-
-
-
-
     return (
         <>
             <Form className="container col-4" ref={form} >

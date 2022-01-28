@@ -1,14 +1,13 @@
+import axios from 'axios';
 import React, {useState} from 'react';
 
-const itemsDatos = () => {
 
-const [products, setProducts] = useState([]),
+const itemsDatos = (props) => {
 
     return(
         
-    <div>Que se yo</div>
-    );
-
+    <div> {props._id} </div>
+    )
 }
 
 
