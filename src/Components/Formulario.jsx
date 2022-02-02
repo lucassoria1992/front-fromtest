@@ -15,6 +15,7 @@ const FormularioCarga = () => {
             nombre: formData.get('nombre'),
             description: formData.get('description'),
             disponible: formData.get('disponible'),
+            imagen: formData.get('imagen'),
         }
         const respuesta = await axios.post('http://localhost:4000/API/crear', data)
         console.log(respuesta)
@@ -32,6 +33,10 @@ const FormularioCarga = () => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Description</Form.Label>
                     <Form.Control name="description" type="text" placeholder="description" />
+                </Form.Group>
+                
+                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                    <Form.Control  name="imagen" type="text" placeholder="Inserte URL de imagen"/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check name="disponible" type="checkbox" label="En Stock"/>
