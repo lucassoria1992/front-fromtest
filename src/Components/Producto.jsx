@@ -2,11 +2,9 @@ import React from 'react';
 import { Card, Button, CardGroup } from 'react-bootstrap';
 
 
-
 const ProductItem = ({ item }) => {
 
     const stock = (item.disponible)
-    const image = (item.imagen)
     if (stock === null) {
         return (
             <CardGroup>
@@ -40,7 +38,6 @@ const ProductItem = ({ item }) => {
                     <Button variant="primary" className='d-block'>Reservalo!</Button>
                     </Card.Footer>
                 </Card>
-
             </CardGroup>
         );
     }
