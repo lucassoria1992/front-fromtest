@@ -1,11 +1,13 @@
 import React, { useRef, useState } from "react";
 import Form from 'react-bootstrap/Form'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Nav } from 'react-bootstrap'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid';
+import ProductItemsList from "../Conteiners/Productos";
 
 const FormularioCarga = () => {
     const form = useRef(null);
+
     const handleSubmit = async () => {
         const formData = new FormData(form.current);
         const data = {
@@ -16,18 +18,20 @@ const FormularioCarga = () => {
             imagen: formData.get('imagen'),
             price:formData.get('price')
         }
-        const respuesta = await axios.post('http://localhost:4000/API/crear', data)
-        console.log(respuesta)
+        await axios.post('http://localhost:4000/API/crear', data)
+        
     }
+    ProductItemsList();
+
     //ModalStates
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Nav.Link onClick={handleShow}>
                 Agregar Producto
-            </Button>
+            </Nav.Link>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Infomacion de Producto </Modal.Title>
