@@ -36,3 +36,124 @@
     transform: rotate(360deg);
   }
 }
+
+/* Responsividad tarjetas */
+.card-footer-responsive{
+  flex-wrap: wrap;
+}
+@media (max-width: 576px){
+  .card-footer-responsive{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .card-footer-responsive > div:first-child{
+    margin-bottom: 8px;
+  }
+}
+
+/* Offcanvas carrito */
+.offcanvas-footer{
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 12px;
+}
+
+/* Barra de rango doble para filtros (si existe rc-slider o nativa) */
+.dual-range {
+  position: relative;
+  width: 100%;
+  height: 36px;
+  padding: 8px 0;
+}
+.dual-range__track {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 6px;
+}
+.dual-range__selection {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  background: #0d6efd;
+  border-radius: 6px;
+}
+.dual-range .range-input {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: transparent;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.dual-range .range-input::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;
+}
+.dual-range .range-input::-moz-range-track {
+  height: 6px;
+  background: transparent;
+}
+.dual-range .range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #0d6efd;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(13,110,253,.25);
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
+}
+.dual-range .range-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #0d6efd;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(13,110,253,.25);
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
+}
+
+/* Search pill full-bleed */
+.pill-search .input-group-text {
+  border-radius: 999px 0 0 999px !important;
+  background: #fff;
+  border-right: none;
+  padding-left: 18px;
+}
+.pill-search .form-control {
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  padding: 14px 16px;
+}
+.pill-search .btn-cta {
+  border-radius: 0 999px 999px 0 !important;
+  padding: 14px 20px;
+}
+.pill-search .input-group-text,
+.pill-search .form-control,
+.pill-search .btn-cta {
+  border-color: #e6e6e6;
+}
+.pill-search .form-control:focus {
+  box-shadow: none;
+}

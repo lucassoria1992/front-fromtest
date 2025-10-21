@@ -1,70 +1,153 @@
-# Getting Started with Create React App
+## Tutti Shop — Demo e‑commerce sin backend (portfolio)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicación e‑commerce frontend lista para demo sin backend, ideal para portfolio. Incluye catálogo inicial, filtros avanzados con doble slider, carrito con overlay, y modo admin para ABM de productos persistiendo en LocalStorage.
 
-## Available Scripts
+Demo local: npm start — Deploy listo para Netlify/Vercel/GitHub Pages.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Características
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Catálogo demo precargado desde `public/products.json` con los campos: `_id`, `nombre`, `description`, `disponible`, `imagen`, `price`, `categoria`.
+- Listado con:
+	- Búsqueda en vivo estilo “pill” full‑bleed.
+	- Chips de categoría (dinámicas por `categoria` y heurísticas).
+	- Filtro “Solo en stock”.
+	- Orden por precio (↑/↓) y nombre (A‑Z/Z‑A).
+	- Rango de precio con barra doble (rc-slider), límites dinámicos por catálogo.
+	- Paginación.
+- Carrito:
+	- Overlay Offcanvas con totales “sticky”.
+	- Sumar/restar, eliminar, vaciar.
+	- Toast al agregar.
+- Modo Admin (demo, clave “admin”):
+	- Dropdown “Probar modo admin” en la navbar.
+	- Alta de productos con validaciones básicas (nombre, imagen, precio>0) y toasts.
+	- Edición/eliminación inline en las tarjetas, con toasts.
+	- Select de categorías existentes + opción “Otra…” para crear nuevas.
+	- Resetear catálogo a `products.json` (con toast).
+- Persistencia en el navegador:
+	- Catálogo y estado admin en LocalStorage.
+	- Filtros en URL + LocalStorage (permite compartir enlaces con filtros aplicados).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React 17 + Create React App
+- React‑Bootstrap 5 + Bootstrap 5
+- rc-slider para barra de precio dual
+- Font Awesome (free) para íconos
 
-### `npm run build`
+Scripts (package.json):
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `npm start`: desarrollo en `http://localhost:3000`
+- `npm run build`: build de producción en `build/`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Cómo correr localmente
 
-### `npm run eject`
+1. Instalar dependencias
+	 - npm install
+2. Arrancar en desarrollo
+	 - npm start
+3. Abrir `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Requisitos: Node 16+ recomendado.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Modo demo y catálogo
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- La app inicializa el catálogo desde `public/products.json` y lo copia a LocalStorage (`catalog.products`).
+- El hook `src/hooks/UseGetItems.jsx` escucha `catalog:updated` para refrescar el listado en vivo.
+- Podés resetear el catálogo desde el menú admin (resetea a `products.json`).
 
-## Learn More
+URL de datos: `public/products.json` es servido como `/products.json` por CRA.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Modo Admin (demo)
 
-### Code Splitting
+- Abrí el dropdown “Probar modo admin” (navbar) y usá la clave: `admin`.
+- Acciones disponibles:
+	- Nuevo producto (modal con validaciones y toasts).
+	- Resetear catálogo a `products.json`.
+	- Salir (cierra modo admin y recarga).
+- Edición inline en tarjetas (si estás en admin): lápiz para editar, tacho para eliminar.
+- Categorías: el campo usa un select con categorías existentes y opción “Otra…” para crear una nueva. Los filtros se actualizan automáticamente.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## Filtros y orden
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Búsqueda: campo grande en la parte superior del listado (píldora).
+- Categorías: chips (Electrónica, Audio, Gaming, Oficina) + dinámicas por dato.
+- Precio: doble slider rc‑slider (rango) con `allowCross=false` para evitar solape.
+- Orden: precio asc/desc y nombre A‑Z/Z‑A.
+- Paginación: configurable (12 por página por defecto).
+- Persistencia: filtros -> URL y LocalStorage (clave `filters`).
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Carrito
 
-### Advanced Configuration
+- Botón en navbar con badge de cantidad.
+- Offcanvas lateral con lista, sumas parciales y total.
+- Controles de cantidad, eliminar y vaciar.
+- Toast de confirmación al agregar desde las tarjetas.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Arquitectura rápida
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- `src/hooks/UseGetItems.jsx`: fuente de catálogo (LocalStorage + `/products.json`).
+- `src/utils/catalog.js`: helpers de LocalStorage y eventos (`catalog:updated`).
+- `src/Conteiners/Productos.jsx`: filtros, slider, grilla y paginado.
+- `src/Components/Producto.jsx`: tarjeta de producto + admin inline.
+- `src/Components/AdminBar.jsx`: menú admin, login demo y alta con validaciones/toasts.
+- `src/Components/Header.jsx`: navbar, botón carrito y overlay Offcanvas con toast al agregar.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Despliegue (portfolio)
+
+Opción 1 — Netlify
+
+1. `npm run build`
+2. Subí la carpeta `build/` o conectá el repo y configurá:
+	 - Build command: `npm run build`
+	 - Publish directory: `build`
+
+Opción 2 — Vercel
+
+1. Conectá el repo.
+2. Framework preset: Create React App.
+3. Build Command: `npm run build` — Output: `build`.
+
+Opción 3 — GitHub Pages
+
+1. `npm run build`
+2. Publicá el contenido de `build/` en una rama `gh-pages` o activá GitHub Pages desde Settings > Pages apuntando a `/ (root)` si usás GitHub Actions.
+
+Notas de ruta: la app asume rutas relativas estándar de CRA, sirviendo `/products.json`. En GH Pages con subruta, asegurate de usar `homepage` en package.json o configurar rutas relativas.
+
+---
+
+## Volver a backend (opcional)
+
+Si tenés un API (por ej.: `http://localhost:4000/API/ver`):
+
+1. En `src/hooks/UseGetItems.jsx` descomentá axios y el bloque “Modo backend”.
+2. Ajustá la URL.
+3. Desactivá la inicialización por `ensureInitialized`.
+
+---
+
+## Troubleshooting
+
+- No aparecen íconos: confirmá dependencia `@fortawesome/fontawesome-free` y que los estilos se importen (Bootstrap incluido).
+- Slider no se ve: `rc-slider` debe estar instalado y con `import 'rc-slider/assets/index.css'` en `Productos.jsx`.
+- `products.json` 404 en producción: recordá incluir `public/products.json` en el deploy; en plataformas de hosting suele copiarse automáticamente.
+- GH Pages en subruta: configurá `homepage` en package.json para rutas correctas.

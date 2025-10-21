@@ -1,3 +1,15 @@
+:root{
+  --color-primary: #0d6efd; /* azul venta */
+  --color-accent: #22c55e; /* verde exito */
+  --color-dark: #111827; /* gris muy oscuro */
+  --color-muted: #6b7280; /* gris medio */
+  --color-bg: #e6f1ff; /* fondo suave */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.10);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,10 +17,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #4BA3A6 ;
+  background-color: var(--color-bg);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Utilidades */
+.elevate-sm{ box-shadow: var(--shadow-sm); }
+.elevate-md{ box-shadow: var(--shadow-md); }
+.rounded-sm{ border-radius: var(--radius-sm); }
+.rounded-md{ border-radius: var(--radius-md); }

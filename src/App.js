@@ -4,17 +4,19 @@ import './App.css';
 import ProductItems from '../src/Conteiners/Productos.jsx';
 import Layout from './Components/Header';
 import Home from './Pages/Home'
+import { CartProvider } from './context/CartContext.jsx';
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout/>
+      <CartProvider>
+        <Layout/>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<ProductItems />} />
           <Route path='/list' element={<ProductItems />} />
         </Routes>
+      </CartProvider>
     </BrowserRouter>
-    
   );
 }
 
