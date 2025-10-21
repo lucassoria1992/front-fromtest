@@ -1,13 +1,12 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import UseGetItems from '../hooks/UseGetItems';
 import ProductItem from '../Components/Producto';
-import { Container, Row, Col, Spinner, Alert, Form, InputGroup, Button, Pagination, Badge, Card } from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Alert, Form, InputGroup, Button, Pagination, Card } from 'react-bootstrap';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 
 const ProductItemsList = () => {
     const { items, loading, error } = UseGetItems();
-    const [activeThumb, setActiveThumb] = useState(null); // 'min' | 'max' | null (ya no es crítico con rc-slider)
 
     // Filtros y orden
     const [query, setQuery] = useState('');
@@ -17,8 +16,8 @@ const ProductItemsList = () => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
 
-    const normalize = (s) => (s || '').toString().toLowerCase();
-    const getCategory = (p) => {
+    const getCategory = useCallback((p) => {
+        const normalize = (s) => (s || '').toString().toLowerCase();
         if (p?.categoria) return normalize(p.categoria);
         const n = normalize(p?.nombre);
         const d = normalize(p?.description);
@@ -27,7 +26,7 @@ const ProductItemsList = () => {
         if (hay(['mouse', 'gamer', 'gaming', 'teclado', 'rgb', 'gamepad'])) return 'gaming';
         if (hay(['impresora', 'silla', 'lámpara', 'lampara', 'soporte', 'oficina'])) return 'oficina';
         return 'electronica';
-    };
+    }, []);
 
     const filtered = useMemo(() => {
         let list = Array.isArray(items) ? items.slice() : [];
@@ -69,7 +68,7 @@ const ProductItemsList = () => {
                 break;
         }
         return list;
-    }, [items, query, onlyStock, sort, category, minPrice, maxPrice]);
+    }, [items, query, onlyStock, sort, category, minPrice, maxPrice, getCategory]);
 
     // Límites dinámicos para sliders de precio (basados en catálogo)
     const { minCatalog, maxCatalog } = useMemo(() => {

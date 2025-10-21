@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Form, InputGroup, Modal, Dropdown, ToastContainer, Toast } from 'react-bootstrap';
 import { isAdmin, loginAdmin, logoutAdmin, getProductsLS, setProductsLS, resetFromJSON } from '../utils/catalog';
 
@@ -12,11 +12,12 @@ export default function AdminBar() {
   const [draft, setDraft] = useState({ nombre: '', imagen: '', price: '', description: '', disponible: true, categoria: '' });
   const [toast, setToast] = useState({ show: false, msg: '', bg: 'success' });
 
-  const categories = useMemo(() => {
+  // Categorías calculadas en cada render (lista pequeña, costo bajo) para evitar warnings de deps
+  const categories = (() => {
     const list = getProductsLS();
     const set = new Set(list.map(p => (p?.categoria || '').toString().trim().toLowerCase()).filter(Boolean));
     return Array.from(set).sort();
-  }, [show]);
+  })();
 
   const can = logged;
   const open = () => setShow(true);

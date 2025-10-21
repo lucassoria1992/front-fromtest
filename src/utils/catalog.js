@@ -40,7 +40,8 @@ export function setProductsLS(arr) {
 
 export async function resetFromJSON() {
     try {
-        const res = await fetch('/products.json');
+        const base = (typeof process !== 'undefined' && process.env && process.env.PUBLIC_URL) ? process.env.PUBLIC_URL : '';
+        const res = await fetch(`${base}/products.json`);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         const list = Array.isArray(data) ? data : [];
