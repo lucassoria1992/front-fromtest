@@ -42,14 +42,26 @@ export async function resetFromJSON() {
     try {
         const base = (typeof process !== 'undefined' && process.env && process.env.PUBLIC_URL) ? process.env.PUBLIC_URL : '';
         const res = await fetch(`${base}/products.json`);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        const list = Array.isArray(data) ? data : [];
-        setProductsLS(list);
-        return list;
+        if (res.ok) {
+            const data = await res.json();
+            const list = Array.isArray(data) ? data : [];
+            if (list.length) {
+                setProductsLS(list);
+                return list;
+            }
+        }
+        throw new Error('No se pudo cargar products.json');
     } catch (e) {
-        console.error('No se pudo resetear catálogo', e);
-        return getProductsLS();
+        console.warn('Fallo fetch de products.json, usando fallback embebido', e);
+        try {
+            const fallback = (await import('./products.fallback.json')).default;
+            const list = Array.isArray(fallback) ? fallback : [];
+            if (list.length) setProductsLS(list);
+            return list;
+        } catch (err) {
+            console.error('No se pudo cargar fallback embebido', err);
+            return getProductsLS();
+        }
     }
 }
 
