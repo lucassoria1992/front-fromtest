@@ -14,8 +14,9 @@ const UseGetItems = () => {
         let mounted = true;
         (async () => {
             try {
-                const data = await ensureInitialized();
-                if (mounted) setItems(Array.isArray(data) ? data : []);
+                await ensureInitialized();
+                // Siempre leer desde LocalStorage para reflejar exactamente lo persistido
+                if (mounted) setItems(getProductsLS());
             } catch (err) {
                 console.error('Error cargando catálogo demo', err);
                 if (mounted) setError(err);

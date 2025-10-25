@@ -179,6 +179,21 @@ const ProductItemsList = () => {
                             Limpiar
                         </Button>
                     </InputGroup>
+            {/* Resumen de resultados y botón para restablecer filtro si todo queda vacío */}
+            <div className="d-flex align-items-center justify-content-between mb-2">
+                <div style={{ color: '#64748b' }}>
+                    {filtered.length} de {items.length} productos
+                </div>
+                <div>
+                    <Button
+                        size="sm"
+                        variant="outline-secondary"
+                        onClick={() => { setQuery(''); setOnlyStock(false); setSort('relevance'); setCategory(''); setMinPrice(''); setMaxPrice(''); setPage(1); }}
+                    >
+                        Restablecer filtros
+                    </Button>
+                </div>
+            </div>
             
 
             {/* Sidebar + Contenido */}

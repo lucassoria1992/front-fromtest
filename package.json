@@ -2,7 +2,6 @@
   "name": "form-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lucassoria1992.github.io/front-fromtest",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",

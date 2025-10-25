@@ -66,7 +66,22 @@ export async function resetFromJSON() {
 }
 
 export async function ensureInitialized() {
+    // 1) Si ya hay catálogo en LocalStorage, usarlo
     const has = getProductsLS();
     if (has && has.length) return has;
+
+    // 2) Fallback embebido inmediato para evitar pantalla vacía en deploy
+    try {
+        const fallback = (await import('./products.fallback.json')).default;
+        const list = Array.isArray(fallback) ? fallback : [];
+        if (list.length) {
+            setProductsLS(list);
+            // 3) Intentar refrescar en segundo plano desde /products.json (si existe)
+            resetFromJSON(); // no esperamos; si carga, emitirá catalog:updated
+            return list;
+        }
+    } catch {}
+
+    // 4) Último intento: cargar directamente desde /products.json
     return await resetFromJSON();
 }
