@@ -1,12 +1,54 @@
-## Tutti Shop — Demo e‑commerce sin backend (portfolio)
+# 🛍️ Tutti Shop — E-commerce Demo
 
-Aplicación e‑commerce frontend lista para demo sin backend, ideal para portfolio. Incluye catálogo inicial, filtros avanzados con doble slider, carrito con overlay, y modo admin para ABM de productos persistiendo en LocalStorage.
+> **Aplicación de tienda online completa y funcional, desarrollada 100% en React sin necesidad de backend.**  
+> Perfecta para demostraciones de portfolio, incluye gestión de productos, filtros avanzados, carrito de compras y modo administrador.
 
-Demo local: npm start — Deploy listo para Netlify/Vercel/GitHub Pages.
+[![React](https://img.shields.io/badge/React-17.0.2-61DAFB?style=flat&logo=react)](https://reactjs.org/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+[🌐 Ver Demo en Vivo](https://tuttishop-demo.netlify.app) | [📖 Documentación](#tabla-de-contenidos)
 
 ---
 
-## Características
+## 📋 Tabla de Contenidos
+
+- [Sobre el Proyecto](#sobre-el-proyecto)
+- [Características Principales](#características-principales)
+- [Stack Tecnológico](#stack-tecnológico)
+- [Instalación y Configuración](#instalación-y-configuración)
+- [Guía de Uso](#guía-de-uso)
+- [Modo Administrador](#modo-administrador)
+- [Arquitectura del Proyecto](#arquitectura-del-proyecto)
+- [Despliegue](#despliegue)
+- [Troubleshooting](#troubleshooting)
+- [Contacto](#contacto)
+
+---
+
+## 🎯 Sobre el Proyecto
+
+**Tutti Shop** es una aplicación e-commerce completa desarrollada como proyecto de portfolio, que demuestra capacidades avanzadas de desarrollo frontend moderno sin necesidad de servidor backend. 
+
+### ¿Qué hace especial a este proyecto?
+
+- **🔄 Persistencia Local**: Todos los datos se gestionan mediante LocalStorage, permitiendo una experiencia completa sin servidor.
+- **⚡ Rendimiento Optimizado**: Catálogo pre-cargado con fallback embebido para carga instantánea en producción.
+- **🎨 UI/UX Profesional**: Diseño responsive con React-Bootstrap, filtros avanzados y animaciones fluidas.
+- **🛠️ Modo Administrador**: Sistema completo de ABM (Alta, Baja, Modificación) de productos con validaciones en tiempo real.
+- **📱 100% Responsive**: Optimizado para dispositivos móviles, tablets y desktop.
+- **🔍 Filtros Avanzados**: Búsqueda en tiempo real, filtros por categoría, rango de precios con doble slider, ordenamiento múltiple.
+
+### Casos de Uso
+
+- ✅ Proyecto de portfolio para desarrolladores frontend
+- ✅ Prototipo funcional para e-commerce
+- ✅ Base para aplicaciones React con gestión de estado local
+- ✅ Ejemplo educativo de arquitectura frontend moderna
+
+---
+
+## ✨ Características Principales
 
 - Catálogo demo precargado desde `public/products.json` con los campos: `_id`, `nombre`, `description`, `disponible`, `imagen`, `price`, `categoria`.
 - Listado con:
