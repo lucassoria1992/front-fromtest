@@ -1,12 +1,15 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useCallback, useTransition, useDeferredValue } from 'react';
 import UseGetItems from '../hooks/UseGetItems';
 import ProductItem from '../Components/Producto';
-import { Container, Row, Col, Spinner, Alert, Form, InputGroup, Button, Pagination, Card } from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Alert, Form, InputGroup, Button, Pagination, Card, Badge } from 'react-bootstrap';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 
 const ProductItemsList = () => {
     const { items, loading, error } = UseGetItems();
+
+    // useTransition para operaciones pesadas de filtrado
+    const [isPending, startTransition] = useTransition();
 
     // Filtros y orden
     const [query, setQuery] = useState('');
@@ -15,6 +18,9 @@ const ProductItemsList = () => {
     const [category, setCategory] = useState(''); // '', 'electronica', 'audio', 'gaming', 'oficina'
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
+
+    // useDeferredValue para búsqueda sin lag
+    const deferredQuery = useDeferredValue(query);
 
     const getCategory = useCallback((p) => {
         const normalize = (s) => (s || '').toString().toLowerCase();
@@ -30,8 +36,9 @@ const ProductItemsList = () => {
 
     const filtered = useMemo(() => {
         let list = Array.isArray(items) ? items.slice() : [];
-        if (query.trim()) {
-            const q = query.toLowerCase();
+        // Usar deferredQuery en lugar de query directamente
+        if (deferredQuery.trim()) {
+            const q = deferredQuery.toLowerCase();
             list = list.filter(p =>
                 (p?.nombre || '').toLowerCase().includes(q) ||
                 (p?.description || '').toLowerCase().includes(q)
@@ -68,7 +75,7 @@ const ProductItemsList = () => {
                 break;
         }
         return list;
-    }, [items, query, onlyStock, sort, category, minPrice, maxPrice, getCategory]);
+    }, [items, deferredQuery, onlyStock, sort, category, minPrice, maxPrice, getCategory]);
 
     // Límites dinámicos para sliders de precio (basados en catálogo)
     const { minCatalog, maxCatalog } = useMemo(() => {
@@ -107,7 +114,7 @@ const ProductItemsList = () => {
     }, [filtered, page]);
 
     // Resetear a página 1 si cambia el filtro u orden
-    useEffect(() => { setPage(1); }, [query, onlyStock, sort, category, minPrice, maxPrice]);
+    useEffect(() => { setPage(1); }, [deferredQuery, onlyStock, sort, category, minPrice, maxPrice]);
 
     // Cargar estado desde URL y localStorage al iniciar
     useEffect(() => {
@@ -149,7 +156,7 @@ const ProductItemsList = () => {
     // Persistir en URL y localStorage cuando cambien
     useEffect(() => {
         const params = new URLSearchParams();
-        if (query) params.set('q', query);
+        if (deferredQuery) params.set('q', deferredQuery);
         if (onlyStock) params.set('stock', '1');
         if (sort && sort !== 'relevance') params.set('sort', sort);
         if (category) params.set('cat', category);
@@ -160,9 +167,9 @@ const ProductItemsList = () => {
         const newUrl = qs ? `?${qs}` : '';
         window.history.replaceState(null, '', newUrl);
         try {
-            localStorage.setItem('filters', JSON.stringify({ query, onlyStock, sort, category, minPrice, maxPrice, page }));
+            localStorage.setItem('filters', JSON.stringify({ query: deferredQuery, onlyStock, sort, category, minPrice, maxPrice, page }));
         } catch { }
-    }, [query, onlyStock, sort, category, minPrice, maxPrice, page]);
+    }, [deferredQuery, onlyStock, sort, category, minPrice, maxPrice, page]);
 
     return (
         <Container fluid style={{ paddingTop: 16, paddingBottom: 32 }}>
@@ -181,14 +188,30 @@ const ProductItemsList = () => {
                     </InputGroup>
             {/* Resumen de resultados y botón para restablecer filtro si todo queda vacío */}
             <div className="d-flex align-items-center justify-content-between mb-2">
-                <div style={{ color: '#64748b' }}>
+                <div style={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 8 }}>
                     {filtered.length} de {items.length} productos
+                    {isPending && (
+                        <Badge bg="secondary" className="d-flex align-items-center" style={{ gap: 4 }}>
+                            <Spinner animation="border" size="sm" style={{ width: 12, height: 12 }} />
+                            Filtrando...
+                        </Badge>
+                    )}
                 </div>
                 <div>
                     <Button
                         size="sm"
                         variant="outline-secondary"
-                        onClick={() => { setQuery(''); setOnlyStock(false); setSort('relevance'); setCategory(''); setMinPrice(''); setMaxPrice(''); setPage(1); }}
+                        onClick={() => {
+                            startTransition(() => {
+                                setQuery(''); 
+                                setOnlyStock(false); 
+                                setSort('relevance'); 
+                                setCategory(''); 
+                                setMinPrice(''); 
+                                setMaxPrice(''); 
+                                setPage(1);
+                            });
+                        }}
                     >
                         Restablecer filtros
                     </Button>
@@ -210,14 +233,17 @@ const ProductItemsList = () => {
                                         id="only-stock"
                                         label="Solo en stock"
                                         checked={onlyStock}
-                                        onChange={(e) => setOnlyStock(e.target.checked)}
+                                        onChange={(e) => startTransition(() => setOnlyStock(e.target.checked))}
                                     />
                                 </Col>
 
                                 <Col xs={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
                                     <InputGroup size="sm">
                                         <InputGroup.Text><i className="fa-solid fa-arrow-down-1-9"></i></InputGroup.Text>
-                                        <Form.Select value={sort} onChange={(e) => setSort(e.target.value)}>
+                                        <Form.Select 
+                                            value={sort} 
+                                            onChange={(e) => startTransition(() => setSort(e.target.value))}
+                                        >
                                             <option value="relevance">Ordenar</option>
                                             <option value="price-asc">Precio: menor a mayor</option>
                                             <option value="price-desc">Precio: mayor a menor</option>
@@ -228,23 +254,47 @@ const ProductItemsList = () => {
                                 </Col>
 
                                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
-                                    <Button size="sm" className="rounded-pill" variant={category === 'electronica' ? 'primary' : 'outline-primary'} onClick={() => setCategory(category === 'electronica' ? '' : 'electronica')}>
+                                    <Button 
+                                        size="sm" 
+                                        className="rounded-pill" 
+                                        variant={category === 'electronica' ? 'primary' : 'outline-primary'} 
+                                        onClick={() => startTransition(() => setCategory(category === 'electronica' ? '' : 'electronica'))}
+                                    >
                                         <i className="fa-solid fa-laptop" style={{ marginRight: 6 }}></i>Electrónica
                                     </Button>
-                                    <Button size="sm" className="rounded-pill" variant={category === 'audio' ? 'primary' : 'outline-primary'} onClick={() => setCategory(category === 'audio' ? '' : 'audio')}>
+                                    <Button 
+                                        size="sm" 
+                                        className="rounded-pill" 
+                                        variant={category === 'audio' ? 'primary' : 'outline-primary'} 
+                                        onClick={() => startTransition(() => setCategory(category === 'audio' ? '' : 'audio'))}
+                                    >
                                         <i className="fa-solid fa-headphones" style={{ marginRight: 6 }}></i>Audio
                                     </Button>
-                                    <Button size="sm" className="rounded-pill" variant={category === 'gaming' ? 'primary' : 'outline-primary'} onClick={() => setCategory(category === 'gaming' ? '' : 'gaming')}>
+                                    <Button 
+                                        size="sm" 
+                                        className="rounded-pill" 
+                                        variant={category === 'gaming' ? 'primary' : 'outline-primary'} 
+                                        onClick={() => startTransition(() => setCategory(category === 'gaming' ? '' : 'gaming'))}
+                                    >
                                         <i className="fa-solid fa-gamepad" style={{ marginRight: 6 }}></i>Gaming
                                     </Button>
-                                    <Button size="sm" className="rounded-pill" variant={category === 'oficina' ? 'primary' : 'outline-primary'} onClick={() => setCategory(category === 'oficina' ? '' : 'oficina')}>
+                                    <Button 
+                                        size="sm" 
+                                        className="rounded-pill" 
+                                        variant={category === 'oficina' ? 'primary' : 'outline-primary'} 
+                                        onClick={() => startTransition(() => setCategory(category === 'oficina' ? '' : 'oficina'))}
+                                    >
                                         <i className="fa-solid fa-print" style={{ marginRight: 6 }}></i>Oficina
                                     </Button>
                                 </div>
 
                                 {category && (
                                     <div style={{ width: '100%', marginTop: 8 }}>
-                                        <Button size="sm" variant="link" onClick={() => setCategory('')}>
+                                        <Button 
+                                            size="sm" 
+                                            variant="link" 
+                                            onClick={() => startTransition(() => setCategory(''))}
+                                        >
                                             Quitar categoría
                                         </Button>
                                     </div>

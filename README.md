@@ -1,13 +1,15 @@
 # 🛍️ Tutti Shop — E-commerce Demo
 
-> **Aplicación de tienda online completa y funcional, desarrollada 100% en React sin necesidad de backend.**  
-> Perfecta para demostraciones de portfolio, incluye gestión de productos, filtros avanzados, carrito de compras y modo administrador.
+> **Aplicación de tienda online completa y funcional, desarrollada 100% en React 18 sin necesidad de backend.**  
+> Perfecta para demostraciones de portfolio, incluye gestión de productos, filtros avanzados, carrito de compras y modo administrador.  
+> **⚡ Optimizada con React 18 features: Suspense, useTransition y useDeferredValue.**
 
-[![React](https://img.shields.io/badge/React-17.0.2-61DAFB?style=flat&logo=react)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react)](https://reactjs.org/)
+[![React Router](https://img.shields.io/badge/React_Router-7.0.2-CA4245?style=flat&logo=react-router)](https://reactrouter.com/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[🌐 Ver Demo en Vivo](https://tuttishop-demo.netlify.app) | [📖 Documentación](#tabla-de-contenidos)
+[🌐 Ver Demo en Vivo](https://tuttishop-demo.netlify.app) | [📖 Documentación](#tabla-de-contenidos) | [⚡ React 18 Features](REACT18-FEATURES.md)
 
 ---
 
@@ -32,8 +34,9 @@
 
 ### ¿Qué hace especial a este proyecto?
 
+- **⚡ React 18 Optimizations**: Implementa Suspense, useTransition y useDeferredValue para UX premium sin lag ([ver detalles](REACT18-FEATURES.md)).
 - **🔄 Persistencia Local**: Todos los datos se gestionan mediante LocalStorage, permitiendo una experiencia completa sin servidor.
-- **⚡ Rendimiento Optimizado**: Catálogo pre-cargado con fallback embebido para carga instantánea en producción.
+- **🚀 Rendimiento Optimizado**: Catálogo pre-cargado con fallback embebido para carga instantánea en producción.
 - **🎨 UI/UX Profesional**: Diseño responsive con React-Bootstrap, filtros avanzados y animaciones fluidas.
 - **🛠️ Modo Administrador**: Sistema completo de ABM (Alta, Baja, Modificación) de productos con validaciones en tiempo real.
 - **📱 100% Responsive**: Optimizado para dispositivos móviles, tablets y desktop.
@@ -44,40 +47,51 @@
 - ✅ Proyecto de portfolio para desarrolladores frontend
 - ✅ Prototipo funcional para e-commerce
 - ✅ Base para aplicaciones React con gestión de estado local
-- ✅ Ejemplo educativo de arquitectura frontend moderna
+- ✅ Ejemplo educativo de arquitectura frontend moderna con React 18
 
 ---
 
 ## ✨ Características Principales
 
+### 🎯 Features de Negocio
+
 - Catálogo demo precargado desde `public/products.json` con los campos: `_id`, `nombre`, `description`, `disponible`, `imagen`, `price`, `categoria`.
 - Listado con:
-	- Búsqueda en vivo estilo “pill” full‑bleed.
-	- Chips de categoría (dinámicas por `categoria` y heurísticas).
-	- Filtro “Solo en stock”.
+	- Búsqueda en vivo estilo "pill" full‑bleed con **useDeferredValue** (sin lag al escribir).
+	- Chips de categoría (dinámicas por `categoria` y heurísticas) con **useTransition** (UI siempre responsive).
+	- Filtro "Solo en stock" y ordenamiento con **transiciones no-bloqueantes**.
 	- Orden por precio (↑/↓) y nombre (A‑Z/Z‑A).
 	- Rango de precio con barra doble (rc-slider), límites dinámicos por catálogo.
-	- Paginación.
+	- Paginación inteligente.
 - Carrito:
-	- Overlay Offcanvas con totales “sticky”.
+	- Overlay Offcanvas con totales "sticky".
 	- Sumar/restar, eliminar, vaciar.
 	- Toast al agregar.
-- Modo Admin (demo, clave “admin”):
-	- Dropdown “Probar modo admin” en la navbar.
+- Modo Admin (demo, clave "admin"):
+	- Dropdown "Probar modo admin" en la navbar.
 	- Alta de productos con validaciones básicas (nombre, imagen, precio>0) y toasts.
 	- Edición/eliminación inline en las tarjetas, con toasts.
-	- Select de categorías existentes + opción “Otra…” para crear nuevas.
+	- Select de categorías existentes + opción "Otra…" para crear nuevas.
 	- Resetear catálogo a `products.json` (con toast).
 - Persistencia en el navegador:
 	- Catálogo y estado admin en LocalStorage.
 	- Filtros en URL + LocalStorage (permite compartir enlaces con filtros aplicados).
 
+### ⚡ Features Técnicas de React 18
+
+- **Suspense Boundaries**: Carga progresiva con fallback visual elegante ([ver implementación](REACT18-FEATURES.md#1-suspense-boundaries))
+- **useTransition**: Filtros no-bloqueantes con indicadores de pending state
+- **useDeferredValue**: Búsqueda sin lag incluso con catálogos grandes
+- **Automatic Batching**: Reducción automática de re-renders
+- **Concurrent Rendering**: Priorización inteligente de updates
+
 ---
 
-## Stack
+## 🛠️ Stack Tecnológico
 
-- React 17 + Create React App
-- React‑Bootstrap 5 + Bootstrap 5
+- **React 18.3.1** + Create React App 5.0.1
+- **React Router 7.0.2** (latest major version)
+- **React‑Bootstrap 2.10.6** + Bootstrap 5.3.3
 - rc-slider para barra de precio dual
 - Font Awesome (free) para íconos
 
